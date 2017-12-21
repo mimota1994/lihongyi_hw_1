@@ -1,42 +1,44 @@
+import tensorflow as tf
 import numpy as np
-#输入x_9是一个n行九列的矩阵，y_10是n维向量
-def layer(x_9,y_10):
-    #generate the initial weight and bias
-    w=np.random.normal(-1,1,9).reshape(9,1)
-    b=np.random.normal(-1,1)
-    #print(w,b)
-
-    x_9=np.array(x_9)
+def layer(input_9,y_10):
+    learning_rate=0.0001
+    training_epochs=2000
+    display_step=50
+    
+    input_9=np.array(input_9)
     y_10=np.array(y_10)
 
-    a=x_9.shape[0]#n
-    b=x_9.shape[1]#9
-    '''
-    #get the Y
-    Y=[]
-    for i in x_9:
-        Y.append(np.sum(np.multiply(w,i))+b)
-    #loss function
-    loss=np.sum(np.square(Y-y_10))/2*(x_9.shape[1])
-    '''
-    #GD
-    learn_rate=0.001
-    loss=1#to go
-    k=1
-    while(k==1):
-        #微分
-        k+=1
-        matrix=x_9.reshape(b,a)
-        p=np.dot(matrix,np.dot(x_9,w)+b-y_10.reshape(a,1))/b
-        #print('p',p)
-        print('w',w)
-        w=w-learn_rate*p
-        print('w*',w)
-        loss=np.sum(np.square(np.dot(x_9,w)+b-y_10))/(2*a)
-        #print('loss',loss)
+    a=input_9.shape[0]#n
+    b=input_9.shape[1]#9
 
-        
-        
+    y_10=y_10.reshape(a,1)
+       
+    w=tf.Variable(np.random.normal(-1,1,9).reshape(9,1),name='weight')
+    b=tf.Variable(np.random.normal(),name='bias')
+    
+    X=tf.placeholder(tf.float64)
+    #print(type(X))
+    Y=tf.placeholder(tf.float64)
+
+    activation=tf.add(tf.multiply(X,w),b)
+
+    cost=tf.reduce_sum(tf.pow(activation-Y,2))/(2*n_samples)
+    optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+
+    init=tf.initialize_all_variables()
+
+    with tf.Session() as sess:
+        sess.run(init)
+
+        for epoch in range(training_epochs):
+            sess.run(optimizer,feed_dict={X:input_9,Y:y_10})
+
+            if epoch%diplay_step==0:
+                print('Epoch:','%04d'%(epoch+1),'cost',sess.run(cost,feed_dict={X:input_9,Y:y_10}))
+                
+    
+
+
         
         
 
